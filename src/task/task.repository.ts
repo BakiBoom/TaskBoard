@@ -15,10 +15,7 @@ export class TaskRepository extends Repository<Task> {
         }
     }
 
-    public async updateRecord(
-        entity: Task,
-        filter: DeepPartial<Task>,
-    ): Promise<UpdateResult | null> {
+    public async updateRecord(entity: Task, filter: DeepPartial<Task>): Promise<UpdateResult | null> {
         try {
             return await this.update({ id: entity.id }, filter);
         } catch {

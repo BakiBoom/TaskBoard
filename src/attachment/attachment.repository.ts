@@ -15,10 +15,7 @@ export class AttachmentRepository extends Repository<Attachment> {
         }
     }
 
-    public async updateRecord(
-        entity: Attachment,
-        filter: DeepPartial<Attachment>,
-    ): Promise<UpdateResult | null> {
+    public async updateRecord(entity: Attachment, filter: DeepPartial<Attachment>): Promise<UpdateResult | null> {
         try {
             return await this.update({ id: entity.id }, filter);
         } catch {

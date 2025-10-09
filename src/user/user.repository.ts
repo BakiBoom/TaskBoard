@@ -15,10 +15,7 @@ export class UserRepository extends Repository<User> {
         }
     }
 
-    public async updateRecord(
-        entity: User,
-        filter: DeepPartial<User>,
-    ): Promise<UpdateResult | null> {
+    public async updateRecord(entity: User, filter: DeepPartial<User>): Promise<UpdateResult | null> {
         try {
             return await this.update({ id: entity.id }, filter);
         } catch {
