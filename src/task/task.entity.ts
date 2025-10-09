@@ -50,7 +50,7 @@ export class Task extends BaseEntity {
     @JoinColumn({
         name: 'board_id',
     })
-    board: Board
+    board: Board;
 
     @ManyToOne(() => TaskDeadline)
     @JoinColumn({

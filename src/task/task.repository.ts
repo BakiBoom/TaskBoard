@@ -3,21 +3,25 @@ import {
     Repository,
     UpdateResult
 } from "typeorm";
+
 import { Task } from "./task.entity";
 
 export class TaskRepository extends Repository<Task> {
     public async createRecord(filter: DeepPartial<Task>): Promise<Task | null> {
         try {
             return await this.save(this.create(filter));
-        } catch (error: any) {
+        } catch {
             return null;
         }
     }
 
-    public async updateRecord(entity: Task, filter: DeepPartial<Task>): Promise<UpdateResult | null> {
+    public async updateRecord(
+        entity: Task,
+        filter: DeepPartial<Task>,
+    ): Promise<UpdateResult | null> {
         try {
-            return await this.update({id: entity.id}, filter);
-        } catch (error: any) {
+            return await this.update({ id: entity.id }, filter);
+        } catch {
             return null;
         }
     }
@@ -26,10 +30,10 @@ export class TaskRepository extends Repository<Task> {
         try {
             return await this.findOne({
                 where: {
-                    id: value
-                }
-            })
-        } catch (error: any) {
+                    id: value,
+                },
+            });
+        } catch {
             return null;
         }
     }

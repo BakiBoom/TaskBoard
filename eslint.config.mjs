@@ -1,42 +1,40 @@
-// @ts-check
 import eslint from '@eslint/js';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
+import tsplugin from '@typescript-eslint/eslint-plugin';
+import tsImportPlugin from 'eslint-plugin-import';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  {
-    ignores: ['eslint.config.mjs'],
-  },
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
-  {
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
-      },
-      sourceType: 'commonjs',
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
-  {
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn',
-
-      'prettier/prettier': ['warn', {
-        singleQuote: false,
-        bracketSpacing: true,
-        printWidth: 100,
-        tabWidth: 4,
-        trailingComma: 'all'
-      }],
-    },
-  },
+    eslint.configs.recommended,
+    tseslint.configs.recommended,
+    {
+        plugins: {
+            'typescript-eslint': tsplugin,
+            'import': tsImportPlugin,
+        },
+        rules: {
+            "@typescript-eslint/no-require-imports": ["warn"],
+            "semi": ["error", "always"],
+            "no-unused-vars": ["warn"],
+            "no-multiple-empty-lines": ["error", {"max": 1, "maxEOF": 0}],
+            'no-trailing-spaces': 'error',
+            'no-multi-spaces': 'error',
+            'no-irregular-whitespace': 'error',
+            'no-mixed-spaces-and-tabs': 'error',
+            'import/order': ['error', {
+                groups: [
+                    'builtin',
+                    'external',
+                    'internal',
+                    'parent',
+                    'sibling',
+                    'index'
+                ],
+                'newlines-between': 'always',
+                alphabetize: {
+                    order: 'asc',
+                    caseInsensitive: true
+                }
+            }],
+        }
+    }
 );

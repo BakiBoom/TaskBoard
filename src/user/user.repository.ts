@@ -1,19 +1,27 @@
-import { DeepPartial, Repository, UpdateResult } from "typeorm";
+import {
+    DeepPartial,
+    Repository,
+    UpdateResult
+} from "typeorm";
+
 import { User } from "./user.entity";
 
 export class UserRepository extends Repository<User> {
     public async createRecord(filter: DeepPartial<User>): Promise<User | null> {
         try {
             return await this.save(this.create(filter));
-        } catch (error: any) {
+        } catch {
             return null;
         }
     }
 
-    public async updateRecord(entity: User, filter: DeepPartial<User>): Promise<UpdateResult | null> {
+    public async updateRecord(
+        entity: User,
+        filter: DeepPartial<User>,
+    ): Promise<UpdateResult | null> {
         try {
-            return await this.update({id: entity.id}, filter);
-        } catch (error: any) {
+            return await this.update({ id: entity.id }, filter);
+        } catch {
             return null;
         }
     }
@@ -22,14 +30,14 @@ export class UserRepository extends Repository<User> {
         try {
             return await this.findOne({
                 where: {
-                    id: value
+                    id: value,
                 },
                 relations: {
                     roles: true,
-                    boards: true
-                }
-            })
-        } catch (error: any) {
+                    boards: true,
+                },
+            });
+        } catch {
             return null;
         }
     }
@@ -38,14 +46,14 @@ export class UserRepository extends Repository<User> {
         try {
             return await this.findOne({
                 where: {
-                    username: value
+                    username: value,
                 },
                 relations: {
                     roles: true,
-                    boards: true
-                }
-            })
-        } catch (error: any) {
+                    boards: true,
+                },
+            });
+        } catch {
             return null;
         }
     }
@@ -54,14 +62,14 @@ export class UserRepository extends Repository<User> {
         try {
             return await this.findOne({
                 where: {
-                    email: value
+                    email: value,
                 },
                 relations: {
                     roles: true,
-                    boards: true
-                }
-            })
-        } catch (error: any) {
+                    boards: true,
+                },
+            });
+        } catch {
             return null;
         }
     }

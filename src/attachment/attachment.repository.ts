@@ -3,21 +3,25 @@ import {
     Repository,
     UpdateResult
 } from "typeorm";
+
 import { Attachment } from "./attachment.entity";
 
 export class AttachmentRepository extends Repository<Attachment> {
     public async createRecord(filter: DeepPartial<Attachment>): Promise<Attachment | null> {
         try {
             return await this.save(this.create(filter));
-        } catch (error: any) {
+        } catch {
             return null;
         }
     }
 
-    public async updateRecord(entity: Attachment, filter: DeepPartial<Attachment>): Promise<UpdateResult | null> {
+    public async updateRecord(
+        entity: Attachment,
+        filter: DeepPartial<Attachment>,
+    ): Promise<UpdateResult | null> {
         try {
-            return await this.update({id: entity.id}, filter);
-        } catch (error: any) {
+            return await this.update({ id: entity.id }, filter);
+        } catch {
             return null;
         }
     }
@@ -26,10 +30,10 @@ export class AttachmentRepository extends Repository<Attachment> {
         try {
             return await this.findOne({
                 where: {
-                    id: value
-                }
+                    id: value,
+                },
             });
-        } catch (error: any) {
+        } catch {
             return null;
         }
     }
@@ -38,10 +42,10 @@ export class AttachmentRepository extends Repository<Attachment> {
         try {
             return await this.findOne({
                 where: {
-                    token: value
-                }
+                    token: value,
+                },
             });
-        } catch (error: any) {
+        } catch {
             return null;
         }
     }

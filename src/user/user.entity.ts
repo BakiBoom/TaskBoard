@@ -26,7 +26,7 @@ export class User extends BaseEntity {
         unique: true
     })
     username: string;
-    
+
     @Column({
         name: 'password',
         type: 'text',
@@ -41,11 +41,11 @@ export class User extends BaseEntity {
         unique: true
     })
     email: string;
-    
+
     @ManyToMany(() => Board)
     @JoinTable()
     boards: Board[];
-    
+
     @ManyToMany(() => Attachment)
     @JoinTable()
     avatars: Attachment[];
