@@ -5,10 +5,13 @@ import {
     PrimaryGeneratedColumn
 } from "typeorm";
 
-@Entity('task_deadlines')
-export class TaskDeadline extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+@Entity('task_statuses')
+export class TaskStatus extends BaseEntity {
+    @PrimaryGeneratedColumn({
+        name: 'id',
+        type: 'bigint'
+    })
+    id: bigint;
 
     @Column({
         name: 'title',

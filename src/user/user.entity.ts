@@ -1,7 +1,6 @@
-import { Attachment } from "src/attachment/attachment-entity";
-import { Board } from "src/board/board-entity";
-import { Task } from "src/task/task-entity";
-import { UserRole } from "src/user-role/user-role-entity";
+import { Attachment } from "src/attachment/attachment.entity";
+import { Board } from "src/board/board.entity";
+import { UserRole } from "src/user-role/user-role.entity";
 import {
     BaseEntity,
     Column,
@@ -14,8 +13,11 @@ import {
 
 @Entity('users')
 export class User extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn({
+        name: 'id',
+        type: 'bigint'
+    })
+    id: bigint;
 
     @Column({
         name: 'username',
@@ -38,20 +40,17 @@ export class User extends BaseEntity {
     })
     email: string;
     
-    @ManyToMany(() => Board, board => board.users)
+    @ManyToMany(() => Board)
     @JoinTable()
     boards: Board[];
     
-    @ManyToMany(() => Attachment, attachment => attachment.users)
+    @ManyToMany(() => Attachment)
     @JoinTable()
     avatars: Attachment[];
 
-    @ManyToMany(() => UserRole, role => role.users)
+    @ManyToMany(() => UserRole)
     @JoinTable()
     roles: UserRole[];
-
-    @ManyToMany(() => Task, task => task.executors)
-    tasks: Task[];
 
     @CreateDateColumn({
         name: 'create_date'

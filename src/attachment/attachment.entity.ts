@@ -1,18 +1,18 @@
-import { Task } from "src/task/task-entity";
-import { User } from "src/user/user-entity";
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     Entity,
-    ManyToMany,
     PrimaryGeneratedColumn
 } from "typeorm";
 
 @Entity('attachments')
 export class Attachment extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn({
+        name: 'id',
+        type: 'bigint'
+    })
+    id: bigint;
 
     @Column({
         name: 'filename',
@@ -35,12 +35,14 @@ export class Attachment extends BaseEntity {
         nullable: false
     })
     path: string;
-    
-    @ManyToMany(() => Task, task => task.attachments)
-    tasks: Task[];
-    
-    @ManyToMany(() => User, user => user.avatars)
-    users: User[];
+
+    @Column({
+        name: 'token',
+        type: 'text',
+        nullable: false,
+        unique: true
+    })
+    token: string;
 
     @CreateDateColumn({
         name: 'create_date'

@@ -1,8 +1,8 @@
-import { Attachment } from "src/attachment/attachment-entity";
-import { Board } from "src/board/board-entity";
-import { TaskDeadline } from "src/task-deadline/task-deadline-entity";
-import { TaskStatus } from "src/task-status/task-status-entity";
-import { User } from "src/user/user-entity";
+import { Attachment } from "src/attachment/attachment.entity";
+import { Board } from "src/board/board.entity";
+import { TaskDeadline } from "src/task-deadline/task-deadline.entity";
+import { TaskStatus } from "src/task-status/task-status.entity";
+import { User } from "src/user/user.entity";
 import {
     BaseEntity,
     Column,
@@ -17,8 +17,11 @@ import {
 
 @Entity('tasks')
 export class Task extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn({
+        name: 'id',
+        type: 'bigint'
+    })
+    id: bigint;
 
     @Column({
         name: 'title',
@@ -35,12 +38,6 @@ export class Task extends BaseEntity {
     })
     description: string;
 
-    @ManyToOne(() => Board)
-    @JoinColumn({
-        name: 'board_id',
-    })
-    board: Board
-
     @Column({
         name: 'deadline_date',
         type: 'datetime',
@@ -48,6 +45,12 @@ export class Task extends BaseEntity {
         nullable: true
     })
     deadlineDate: string;
+
+    @ManyToOne(() => Board)
+    @JoinColumn({
+        name: 'board_id',
+    })
+    board: Board
 
     @ManyToOne(() => TaskDeadline)
     @JoinColumn({
@@ -67,13 +70,13 @@ export class Task extends BaseEntity {
     })
     authorId: number;
 
-    @ManyToMany(() => User, user => user.tasks)
+    @ManyToMany(() => User)
     @JoinTable({
         name: 'executors'
     })
     executors: User[];
 
-    @ManyToMany(() => Attachment, attachment => attachment.tasks)
+    @ManyToMany(() => Attachment)
     @JoinTable()
     attachments: Attachment[];
 

@@ -1,20 +1,21 @@
-import { Attachment } from "src/attachment/attachment-entity";
-import { User } from "src/user/user-entity";
+import { Attachment } from "src/attachment/attachment.entity";
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     Entity,
     JoinColumn,
-    ManyToMany,
     ManyToOne,
     PrimaryGeneratedColumn
 } from "typeorm";
 
 @Entity('boards')
 export class Board extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn({
+        name: 'id',
+        type: 'bigint'
+    })
+    id: bigint;
 
     @Column({
         name: 'title',
@@ -36,9 +37,6 @@ export class Board extends BaseEntity {
         name: 'attachment_id'
     })
     attachment: Attachment;
-    
-    @ManyToMany(() => User, user => user.boards)
-    users: User[];
 
     @CreateDateColumn({
         name: 'create_date'

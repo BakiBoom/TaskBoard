@@ -1,16 +1,17 @@
-import { User } from "src/user/user-entity";
 import {
     BaseEntity,
     Column,
     Entity,
-    ManyToMany,
     PrimaryGeneratedColumn
 } from "typeorm";
 
 @Entity('user_role')
 export class UserRole extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn({
+        name: 'id',
+        type: 'bigint'
+    })
+    id: bigint;
 
     @Column({
         name: 'title',
@@ -19,7 +20,4 @@ export class UserRole extends BaseEntity {
         nullable: false
     })
     title: string;
-
-    @ManyToMany(() => User, user => user.roles)
-    users: User[];
 }
