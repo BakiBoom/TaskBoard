@@ -22,7 +22,8 @@ export class User extends BaseEntity {
     @Column({
         name: 'username',
         type: 'text',
-        nullable: false
+        nullable: false,
+        unique: true
     })
     username: string;
     
@@ -36,7 +37,8 @@ export class User extends BaseEntity {
     @Column({
         name: 'email',
         type: 'text',
-        nullable: false
+        nullable: false,
+        unique: true
     })
     email: string;
     
