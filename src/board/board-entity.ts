@@ -1,0 +1,47 @@
+import { Attachment } from "src/attachment/attachment-entity";
+import { User } from "src/user/user-entity";
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToMany,
+    ManyToOne,
+    PrimaryGeneratedColumn
+} from "typeorm";
+
+@Entity('boards')
+export class Board extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column({
+        name: 'title',
+        type: 'varchar',
+        length: 255,
+        nullable: false
+    })
+    title: string;
+
+    @Column({
+        name: 'description',
+        type: 'text',
+        nullable: false
+    })
+    description: string;
+
+    @ManyToOne(() => Attachment)
+    @JoinColumn({
+        name: 'attachment_id'
+    })
+    attachment: Attachment;
+    
+    @ManyToMany(() => User, user => user.boards)
+    users: User[];
+
+    @CreateDateColumn({
+        name: 'create_date'
+    })
+    createDate: string;
+}
