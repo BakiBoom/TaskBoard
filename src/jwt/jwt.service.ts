@@ -15,8 +15,7 @@ export class JwtService {
     }
 
     public async verifyToken(token: string) {
-        const decoded = jwt.decode(token);
-        return decoded;
+        return jwt.decode(token) as UserPayload;
     }
 
     public async setToken(key: string, token: string): Promise<string | null> {
