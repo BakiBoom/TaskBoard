@@ -57,7 +57,7 @@ export class Task extends BaseEntity {
         name: 'task_deadline_id'
     })
     deadline: TaskDeadline;
-    
+
     @ManyToOne(() => TaskStatus)
     @JoinColumn({
         name: 'task_status_id'

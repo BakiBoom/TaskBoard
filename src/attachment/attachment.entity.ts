@@ -4,7 +4,7 @@ import {
     CreateDateColumn,
     Entity,
     PrimaryGeneratedColumn
-} from "typeorm"
+} from "typeorm";
 
 @Entity('attachments')
 export class Attachment extends BaseEntity {
@@ -12,14 +12,14 @@ export class Attachment extends BaseEntity {
         name: 'id',
         type: 'bigint'
     })
-    id: bigint
+    id: bigint;
 
     @Column({
         name: 'filename',
         type: 'text',
         nullable: false
     })
-    filename: string
+    filename: string;
 
     @Column({
         name: 'mime',
@@ -27,14 +27,14 @@ export class Attachment extends BaseEntity {
         length: 20,
         nullable: false
     })
-    mime: string
+    mime: string;
 
     @Column({
         name: 'path',
         type: 'text',
         nullable: false
     })
-    path: string
+    path: string;
 
     @Column({
         name: 'token',
@@ -42,10 +42,10 @@ export class Attachment extends BaseEntity {
         nullable: false,
         unique: true
     })
-    token: string
+    token: string;
 
     @CreateDateColumn({
         name: 'create_date'
     })
-    createDate: string
+    createDate: string;
 }

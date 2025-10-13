@@ -12,7 +12,7 @@ export class TaskDeadline extends BaseEntity {
         type: 'bigint'
     })
     id: bigint;
-    
+
     @Column({
         name: 'title',
         type: 'varchar',
