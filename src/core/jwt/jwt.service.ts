@@ -14,7 +14,7 @@ export class JwtService {
         return {accessToken, refreshToken};
     }
 
-    public async verifyToken(token: string) {
+    public verifyToken(token: string) {
         return jwt.decode(token) as UserPayload;
     }
 

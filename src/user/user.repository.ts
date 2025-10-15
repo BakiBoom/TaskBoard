@@ -11,6 +11,7 @@ export class UserRepository extends Repository<User> {
         try {
             return await this.save(this.create(filter));
         } catch {
+            console.log("Error creating record repository");
             return null;
         }
     }
