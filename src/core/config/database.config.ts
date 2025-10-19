@@ -7,5 +7,5 @@ export default registerAs('database', () => ({
     port: parseInt(process.env.DATABASE_PORT as string),
     name: process.env.DATABASE_NAME as string,
     user: process.env.DATABASE_USER as string,
-    password: process.env.DATABASE_PASWORD as string
+    password: process.env.DATABASE_PASSWORD as string
 }));

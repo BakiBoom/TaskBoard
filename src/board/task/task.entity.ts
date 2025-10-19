@@ -1,7 +1,7 @@
 import { Attachment } from "src/attachment/attachment.entity";
 import { Board } from "src/board/board.entity";
-import { TaskDeadline } from "src/task-deadline/task-deadline.entity";
-import { TaskStatus } from "src/task-status/task-status.entity";
+import { TaskDeadline } from "src/board/task/task-deadlines/task-deadline.entity";
+import { TaskStatus } from "src/board/task/task-status/task-status.entity";
 import { User } from "src/user/user.entity";
 import {
     BaseEntity,
@@ -40,8 +40,7 @@ export class Task extends BaseEntity {
 
     @Column({
         name: 'deadline_date',
-        type: 'datetime',
-        length: 6,
+        type: 'date',
         nullable: true
     })
     deadlineDate: string;

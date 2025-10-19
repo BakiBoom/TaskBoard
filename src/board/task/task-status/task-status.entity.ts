@@ -20,4 +20,11 @@ export class TaskStatus extends BaseEntity {
         nullable: false
     })
     title: string;
+
+    @Column({
+        name: 'description',
+        type: 'text',
+        nullable: false
+    })
+    description: string;
 }
