@@ -1,16 +1,17 @@
 import {Injectable} from "@nestjs/common";
 import {ILoginDto} from "src/auth/interfaces/login.dto";
 import {IRegisterDto} from "src/auth/interfaces/register.dto";
-import {CryptService} from "src/core/crypt/crypt.service";
-import {JwtService} from "src/core/jwt/jwt.service";
+import {JwtService} from "src/auth/jwt/jwt.service";
 import {UserRepository} from "src/user/user.repository";
+import { Crypt } from "src/utils/crypt";
 
 @Injectable()
 export class AuthService {
 
-    constructor(private readonly userRepository : UserRepository,
-                private readonly jwtService: JwtService,
-                private readonly CryptService: CryptService) {}
+    constructor(
+        private readonly userRepository : UserRepository,
+        private readonly jwtService: JwtService,
+    ) {}
 
     async register(registerDto: IRegisterDto) {
 
@@ -22,7 +23,7 @@ export class AuthService {
             return null;
         }
 
-        const cryptPassword: string = await this.CryptService.createHash(password);
+        const cryptPassword: string = await Crypt.encrypt(password);
 
         const userData: IRegisterDto = {
             username,
@@ -53,7 +54,7 @@ export class AuthService {
             return null;
         }
 
-        const isValid = await this.CryptService.verifyPassword(loginDto.password, user.password);
+        const isValid = await Crypt.verify(loginDto.password, user.password);
 
         if(!isValid){
             return null;

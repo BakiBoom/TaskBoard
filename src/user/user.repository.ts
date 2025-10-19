@@ -29,11 +29,7 @@ export class UserRepository extends Repository<User> {
             return await this.findOne({
                 where: {
                     id: value,
-                },
-                relations: {
-                    roles: true,
-                    boards: true,
-                },
+                }
             });
         } catch {
             return null;
@@ -45,11 +41,7 @@ export class UserRepository extends Repository<User> {
             return await this.findOne({
                 where: {
                     username: value,
-                },
-                relations: {
-                    roles: true,
-                    boards: true,
-                },
+                }
             });
         } catch {
             return null;
@@ -61,11 +53,7 @@ export class UserRepository extends Repository<User> {
             return await this.findOne({
                 where: {
                     email: value,
-                },
-                relations: {
-                    roles: true,
-                    boards: true,
-                },
+                }
             });
         } catch {
             return null;

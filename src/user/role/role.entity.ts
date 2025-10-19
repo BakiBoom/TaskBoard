@@ -5,8 +5,8 @@ import {
     PrimaryGeneratedColumn
 } from "typeorm";
 
-@Entity('user_role')
-export class UserRole extends BaseEntity {
+@Entity('user_roles')
+export class Role extends BaseEntity {
     @PrimaryGeneratedColumn({
         name: 'id',
         type: 'bigint'

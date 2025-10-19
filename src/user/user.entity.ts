@@ -1,6 +1,4 @@
 import { Attachment } from "src/attachment/attachment.entity";
-import { Board } from "src/board/board.entity";
-import { UserRole } from "src/user-role/user-role.entity";
 import {
     BaseEntity,
     Column,
@@ -42,17 +40,9 @@ export class User extends BaseEntity {
     })
     email: string;
 
-    @ManyToMany(() => Board)
-    @JoinTable()
-    boards: Board[];
-
     @ManyToMany(() => Attachment)
     @JoinTable()
     avatars: Attachment[];
-
-    @ManyToMany(() => UserRole)
-    @JoinTable()
-    roles: UserRole[];
 
     @CreateDateColumn({
         name: 'create_date'
