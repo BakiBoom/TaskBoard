@@ -21,7 +21,8 @@ import { AppService } from "./app.service";
                 authConfig,
                 databaseConfig,
                 redisConfig
-            ]
+            ],
+            isGlobal: true
         }),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],

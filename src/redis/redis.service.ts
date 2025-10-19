@@ -1,22 +1,28 @@
-import { Injectable } from "@nestjs/common";
-import { config } from "dotenv";
+import {
+    Inject,
+    Injectable
+} from "@nestjs/common";
+import { ConfigType } from "@nestjs/config";
 import { Redis } from "ioredis";
-config();
+import redisConfig from "src/core/config/redis.config";
 
 @Injectable()
 export class RedisService {
-    private redis = new Redis(
+    constructor (
+        @Inject(redisConfig.KEY)
+        private redisConfiguration: ConfigType<typeof redisConfig>
+    ) {}
+
+    private client = new Redis(
         {
-            port: Number(process.env.REDIS_PORT),
-            host: process.env.REDIS_HOST as string,
-            password: process.env.REDIS_PASSWORD as string,
-            db: 0
+            port: this.redisConfiguration.port,
+            host: this.redisConfiguration.host
         }
     );
 
     public async get(key: string): Promise<string | null> {
-        if(this.redis.on("connect", () => true)){
-            return await this.redis.get(key);
+        if(this.client.on("connect", () => true)){
+            return await this.client.get(key);
         }
         else{
             return null;
@@ -24,8 +30,8 @@ export class RedisService {
     }
 
     public async set(key: string, value: string): Promise<string | null> {
-        if(this.redis.on("connect", () => true)){
-            return await this.redis.set(key, value);
+        if(this.client.on("connect", () => true)){
+            return await this.client.set(key, value);
         }
         else{
             return null;
@@ -33,8 +39,8 @@ export class RedisService {
     }
 
     public async delete(key: string): Promise<number | null> {
-        if(this.redis.on("connect", () => true)){
-            return await this.redis.del(key);
+        if(this.client.on("connect", () => true)){
+            return await this.client.del(key);
         }
         else{
             return null;

@@ -1,5 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import {
+    Inject,
+    Injectable
+} from "@nestjs/common";
+import { ConfigType } from "@nestjs/config";
 import jwt from "jsonwebtoken";
+import authConfig from "src/core/config/auth.config";
 import { RedisService } from "src/redis/redis.service";
 
 import { UserPayload } from "./interfaces/UserPayload";
@@ -7,12 +12,14 @@ import { UserPayload } from "./interfaces/UserPayload";
 @Injectable()
 export class JwtService {
     constructor(
+        @Inject(authConfig.KEY)
+        private authConfiguration: ConfigType<typeof authConfig> ,
         private redisService: RedisService
     ) {}
 
     public generateTokens(userPayload: UserPayload) {
-        const accessToken = jwt.sign(userPayload, process.env.JWT_SERCRET as string, {expiresIn: '1h'});
-        const refreshToken = jwt.sign(userPayload, process.env.JWT_SECRET as string, {expiresIn: '10 d'});
+        const accessToken = jwt.sign(userPayload, this.authConfiguration.secretKey, {expiresIn: this.authConfiguration.accessExpiresIn} as jwt.SignOptions);
+        const refreshToken = jwt.sign(userPayload, this.authConfiguration.secretKey, {expiresIn: this.authConfiguration.refershExpiresIn} as jwt.SignOptions);
         return {accessToken, refreshToken};
     }
 
