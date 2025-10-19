@@ -9,7 +9,7 @@ services:
             POSTGRES_PASSWORD: postgres
             POSTGRES_DB: tb
         ports:
-            - 5433:5432
+            - 5434:5432
 
     redis:
         container_name: "tb-redis"
