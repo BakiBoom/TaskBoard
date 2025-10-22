@@ -1,6 +1,6 @@
 import {Injectable} from "@nestjs/common";
-import {ILoginDto} from "src/auth/interfaces/login.dto";
-import {IRegisterDto} from "src/auth/interfaces/register.dto";
+import {ILogin, IRegister} from "src/auth/auth.models";
+import {IUserPayload} from "src/auth/jwt/jwt.models";
 import {JwtService} from "src/auth/jwt/jwt.service";
 import {UserRepository} from "src/user/user.repository";
 import { Crypt } from "src/utils/crypt";
@@ -13,27 +13,25 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
 
-    async register(registerDto: IRegisterDto) {
+    async register(registerDto: IRegister) {
 
         const {username, email, password} = registerDto;
-
         const existingUser = await this.userRepository.getByEmail(email);
-
         if (existingUser) {
+            console.log('A user with this email is already registered.',existingUser);
             return null;
         }
 
         const cryptPassword: string = await Crypt.encrypt(password);
-
-        const userData: IRegisterDto = {
+        const userData: IRegister = {
             username,
             email,
             password: cryptPassword
         };
 
         const user = await this.userRepository.createRecord(userData);
-
         if (!user) {
+            console.log("Could not create user", user);
             return null;
         }
 
@@ -42,36 +40,45 @@ export class AuthService {
             email: user.email,
             username: user.username,
         });
+        await this.jwtService.setToken(user.id.toString(), tokens.refreshToken);
 
-        await this.jwtService.setToken('refresh_token', tokens.refreshToken);
-
-        return tokens;
+        return tokens.accessToken;
     }
 
-    async login(loginDto: ILoginDto) {
+    async login(loginDto: ILogin) {
         const user = await this.userRepository.getByEmail(loginDto.email);
         if (!user) {
             return null;
         }
-
         const isValid = await Crypt.verify(loginDto.password, user.password);
-
         if(!isValid){
             return null;
         }
-
         const tokens = this.jwtService.generateTokens({
             userId: user.id,
             email: user.email,
             username: user.username,
         });
+        await this.jwtService.setToken('refresh', tokens.refreshToken);
 
-        await this.jwtService.setToken('refresh_token', tokens.refreshToken);
-
-        return tokens;
+        return tokens.accessToken;
     }
 
     async logout(id: number) {
-        return await this.jwtService.deleteToken(String(id));
+        await this.jwtService.deleteToken(String(id));
+        return true;
+    }
+
+    async validate(payload: IUserPayload): Promise<IUserPayload | null> {
+        const user = await this.userRepository.getById(payload.userId);
+        if (!user) {
+            console.log("Could not find user", payload.userId);
+            return null;
+        }
+        return {
+            userId: user.id,
+            username: user.username,
+            email: user.email,
+        };
     }
 }
