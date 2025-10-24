@@ -1,3 +1,8 @@
-import {AuthGuard} from "@nestjs/passport";
+import {CanActivate, ExecutionContext} from "@nestjs/common";
 
-export class JwtGuard extends AuthGuard('jwt') {}
+export class JwtGuard implements CanActivate {
+    canActivate(context: ExecutionContext): boolean {
+        const request = context.switchToHttp().getRequest();
+        return request.user;
+    }
+}

@@ -22,8 +22,12 @@ export class JwtService {
         return {accessToken, refreshToken};
     }
 
-    public verifyToken(token: string) {
+    public decodeToken(token: string) {
         return jwt.decode(token) as IUserPayload;
+    }
+
+    public verifyToken(token: string) {
+        return jwt.verify(token, this.authConfiguration.secretKey, {ignoreExpiration: false}) as IUserPayload;
     }
 
     public async setToken(key: string, token: string): Promise<string | null> {

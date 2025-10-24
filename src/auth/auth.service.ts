@@ -59,7 +59,7 @@ export class AuthService {
             email: user.email,
             username: user.username,
         });
-        await this.jwtService.setToken('refresh', tokens.refreshToken);
+        await this.jwtService.setToken(user.id.toString(), tokens.refreshToken);
 
         return tokens.accessToken;
     }
