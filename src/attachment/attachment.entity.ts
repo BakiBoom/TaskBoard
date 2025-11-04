@@ -1,8 +1,11 @@
+import { Task } from "src/board/task/task.entity";
+import { User } from "src/user/user.entity";
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     Entity,
+    ManyToMany,
     PrimaryGeneratedColumn
 } from "typeorm";
 
@@ -43,6 +46,12 @@ export class Attachment extends BaseEntity {
         unique: true
     })
     token: string;
+
+    @ManyToMany(() => User, user => user.avatars)
+    users: User[];
+
+    @ManyToMany(() => Task, task => task.attachments)
+    tasks: Task[];
 
     @CreateDateColumn({
         name: 'create_date'

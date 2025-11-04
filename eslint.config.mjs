@@ -13,6 +13,7 @@ export default tseslint.config(
         },
         rules: {
             "@typescript-eslint/no-require-imports": ["warn"],
+            '@typescript-eslint/no-explicit-any': 'off',
             "semi": ["error", "always"],
             "no-unused-vars": ["warn"],
             "no-multiple-empty-lines": ["error", {"max": 1, "maxEOF": 0}],

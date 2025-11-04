@@ -1,4 +1,8 @@
-import {MiddlewareConsumer, Module, RequestMethod} from "@nestjs/common";
+import {
+    MiddlewareConsumer,
+    Module,
+    RequestMethod
+} from "@nestjs/common";
 import {
     ConfigModule,
     ConfigService
@@ -42,6 +46,5 @@ export class AppModule {
         consumer
             .apply(AuthMiddleware)
             .forRoutes({path: 'auth/test', method: RequestMethod.ALL});
-
     }
 }

@@ -45,6 +45,14 @@ export class Task extends BaseEntity {
     })
     deadlineDate: string;
 
+    @Column({
+        name: 'in_archive',
+        type: 'boolean',
+        nullable: false,
+        default: false
+    })
+    inArchive: boolean;
+
     @ManyToOne(() => Board)
     @JoinColumn({
         name: 'board_id',
@@ -67,16 +75,18 @@ export class Task extends BaseEntity {
     @JoinColumn({
         name: 'author_id'
     })
-    authorId: number;
+    author: User;
 
-    @ManyToMany(() => User)
+    @ManyToMany(() => User, user => user.tasks)
     @JoinTable({
         name: 'executors'
     })
     executors: User[];
 
-    @ManyToMany(() => Attachment)
-    @JoinTable()
+    @ManyToMany(() => Attachment, attachment => attachment.tasks)
+    @JoinTable({
+        name: 'tasks_attachments'
+    })
     attachments: Attachment[];
 
     @CreateDateColumn({
