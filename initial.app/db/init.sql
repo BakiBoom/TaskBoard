@@ -6,4 +6,9 @@ INSERT INTO task_deadlines (name, description) VALUES
 INSERT INTO task_statuses (name, description) VALUES
 ('Created', 'Task has been created but not yet started'),
 ('In Process', 'Task is currently being worked on'),
-('Completed', 'Task has been finished successfully')
+('Completed', 'Task has been finished successfully');
+
+INSERT INTO user_roles (title, description) VALUES
+('Master', 'Board creator'),
+('Admin', 'Intervention in board related operations is allowed'),
+('Executor', 'The task performer can only change task statuses');
