@@ -7,7 +7,7 @@ export interface ICreateTaskRequest {
     description: string;
     deadlineDate: string;
     boardId: bigint;
-    dedlineId: bigint;
+    deadlineId: bigint;
     statusId: bigint;
     authorId: bigint;
     executorIds: bigint[];
@@ -16,7 +16,3 @@ export interface ICreateTaskRequest {
 export interface IUpdateTaskRequest extends IFilter<Task> {
     id: bigint;
 };
-
-export interface IRemoveTaskRequest {
-    id: bigint;
-}

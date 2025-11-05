@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { IGeneralResponse } from "src/common/intrfaces/IGeneralResponse";
-import { Repository } from "typeorm";
+import { IResult } from "src/common/intrfaces/IProcessing";
+import { DeepPartial, Repository } from "typeorm";
 
 import { TaskDeadline } from "./task-deadline.entity";
-import { ICreateTaskDeadlineRequest } from "./task-deadline.models";
 
 @Injectable()
 export class TaskDeadlineService {
@@ -11,39 +10,36 @@ export class TaskDeadlineService {
         private readonly _taskStatusRepository: Repository<TaskDeadline>
     ) {}
 
-    public async getAll(): Promise<IGeneralResponse<TaskDeadline[] | null>> {
+    public async getAll(): Promise<IResult<TaskDeadline[]>> {
         try {
             const statuses: TaskDeadline[] = await this._taskStatusRepository.find();
             if (statuses.length === 0) {
                 return {
-                    data: null,
-                    errors: ['Unable to find task statuses']
+                    error: 'Unable to find task statuses'
                 };
             }
             return {
-                data: statuses,
-                errors: []
+                result: statuses,
+                error: null
             };
         } catch (error: any) {
             return {
-                data: null,
-                errors: [error.message]
+                error: error.message
             };
         }
     }
 
-    public async create(data: ICreateTaskDeadlineRequest): Promise<IGeneralResponse<TaskDeadline | null>> {
+    public async create(filter: DeepPartial<TaskDeadline>): Promise<IResult<TaskDeadline | null>> {
         try {
-            const entity: TaskDeadline = this._taskStatusRepository.create(data.filter);
+            const entity: TaskDeadline = this._taskStatusRepository.create(filter);
             const status: TaskDeadline = await this._taskStatusRepository.save(entity);
             return {
-                data: status,
-                errors: []
+                result: status,
+                error: null
             };
         } catch (error: any) {
             return {
-                data: null,
-                errors: [error.message]
+                error: error.message
             };
         }
     }

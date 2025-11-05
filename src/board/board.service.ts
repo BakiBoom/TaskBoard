@@ -1,28 +1,116 @@
 import { Injectable } from "@nestjs/common";
-import { IGeneralResponse } from "src/common/intrfaces/IGeneralResponse";
-import { Repository } from "typeorm";
+import {
+    IResult,
+    IUserForBoard
+} from "src/common/intrfaces/IProcessing";
+import { UserBoards } from "src/user/user-boards/user-boards.entity";
+import { UserBoardsService } from "src/user/user-boards/user-boards.service";
+import {
+    DeepPartial,
+    DeleteResult,
+    Repository
+} from "typeorm";
 
 import { Board } from "./board.entity";
-import { ICreateBoardRequest } from "./board.models";
+import { IBoardInfo } from "./board.models";
+import { Task } from "./task/task.entity";
+import { TaskService } from "./task/task.service";
 
 @Injectable()
 export class BoardService {
     constructor(
-        private _boardRepository: Repository<Board>,
+        private readonly _taskService: TaskService,
+        private readonly _userBoardsService: UserBoardsService,
+        private readonly _boardRepository: Repository<Board>
     ) {}
 
-    public async create(data: ICreateBoardRequest): Promise<IGeneralResponse<Board | null>> {
+    public async create(users: IUserForBoard[], filter: DeepPartial<Board>): Promise<IResult<Board>> {
         try {
-            const entity: Board = this._boardRepository.create(data.filter);
-            const board: Board = await this._boardRepository.save(entity);
+            const boardEntity: Board = this._boardRepository.create(filter);
+            const board: Board = await this._boardRepository.save(boardEntity);
+            const userBoards: IResult<UserBoards[]> = await this._userBoardsService.create(board.id, users);
+            if (userBoards.error) {
+                return {
+                    error: userBoards.error
+                };
+            }
             return {
-                data: board,
-                errors: []
+                result: board,
+                error: null
             };
         } catch (error: any) {
             return {
-                data: null,
-                errors: [error.message]
+                error: error.message
+            };
+        }
+    }
+
+    public async getById(id: bigint): Promise<IResult<IBoardInfo>> {
+        try {
+            const board: Board | null = await this._boardRepository.findOne({
+                where: {
+                    id: id
+                }
+            });
+            if (!board) {
+                return {
+                    error: `Could not find board with id: ${id}`
+                };
+            }
+            const userBoards: IResult<UserBoards[]> = await this._userBoardsService.getByBoardId(board.id);
+            if (userBoards.error) {
+                return {
+                    error: userBoards.error
+                };
+            }
+            const tasks: IResult<Task[]> = await this._taskService.getByBoardId(board.id);
+            if (tasks.error) {
+                return {
+                    error: userBoards.error
+                };
+            }
+            return {
+                result: {
+                    board: board,
+                    userBoards: userBoards.result as UserBoards[],
+                    tasks: tasks.result as Task[]
+                },
+                error: null
+            };
+        } catch (error: any) {
+            return {
+                error: error.message
+            };
+        }
+    }
+
+    public async remove(boardId: bigint): Promise<IResult<bigint>> {
+        const removeTaskResult: IResult<bigint> = await this._taskService.removeByBoardId(boardId);
+        if (removeTaskResult.error) {
+            return {
+                error: removeTaskResult.error
+            };
+        }
+        const removeUserBoardResult: IResult<bigint> = await this._userBoardsService.removeByBoardId(boardId);
+        if (removeUserBoardResult.error) {
+            return {
+                error: removeUserBoardResult.error
+            };
+        }
+        try {
+            const deleteResult: DeleteResult = await this._boardRepository.delete({id: boardId});
+            if (deleteResult.affected && deleteResult.affected > 0) {
+                return {
+                    result: boardId,
+                    error: null
+                };
+            }
+            return {
+                error: 'The record was not found or the data has not deleted.'
+            };
+        } catch (error: any) {
+            return {
+                error: error.message
             };
         }
     }

@@ -1,10 +1,15 @@
 import { DeepPartial } from "typeorm";
 
-export interface IFilter<I> {
-    filter: DeepPartial<I>;
+export interface IResult<T = any> {
+    error: string | null;
+    result?: T;
 };
 
-export interface IPartner {
+export interface IFilter<T> {
+    filter: DeepPartial<T>;
+};
+
+export interface IUserForBoard {
     userId: bigint,
     roleId: bigint
 };

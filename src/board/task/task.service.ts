@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { IGeneralResponse } from "src/common/intrfaces/IGeneralResponse";
+import { IResult } from "src/common/intrfaces/IProcessing";
 import { User } from "src/user/user.entity";
 import {
     DeepPartial,
@@ -9,7 +9,6 @@ import {
 } from "typeorm";
 
 import { Task } from "./task.entity";
-import { ICreateTaskRequest, IRemoveTaskRequest, IUpdateTaskRequest } from "./task.models";
 
 @Injectable()
 export class TaskService {
@@ -17,76 +16,119 @@ export class TaskService {
         private readonly _taskRepository: Repository<Task>,
     ) {}
 
-    public async create(data: ICreateTaskRequest): Promise<IGeneralResponse<Task | null>> {
+    public async create(title: string, description: string, deadlineDate: string, boardId: bigint, deadlineId: bigint, statusId: bigint, authorId: bigint, executorIds: bigint[]): Promise<IResult<Task>> {
         try {
-            if (data.executorIds.length <= 0) {
+            if (executorIds.length <= 0) {
                 return {
-                    data: null,
-                    errors: ['The performers are not specified']
+                    error: 'The performers are not specified'
                 };
             }
-            const executorIds: DeepPartial<User>[] = data.executorIds.map(item => ({id: item}));
+            const executorFromUserIds: DeepPartial<User>[] = executorIds.map(item => ({id: item}));
             const entity: Task = this._taskRepository.create({
-                title: data.title,
-                description: data.description,
-                deadlineDate: data.deadlineDate,
-                board: {id: data.boardId},
-                author: {id: data.authorId},
-                deadline: {id: data.dedlineId},
-                status: {id: data.statusId},
-                executors: executorIds,
+                title: title,
+                description: description,
+                deadlineDate: deadlineDate,
+                board: {id: boardId},
+                author: {id: authorId},
+                deadline: {id: deadlineId},
+                status: {id: statusId},
+                executors: executorFromUserIds,
             });
             const task: Task = await this._taskRepository.save(entity);
             return {
-                data: task,
-                errors: []
+                result: task,
+                error: null
             };
         } catch (error: any) {
             return {
-                data: null,
-                errors: [error.message]
+                error: error.message
             };
         }
     }
 
-    public async remove(data: IRemoveTaskRequest): Promise<IGeneralResponse<bigint | null>> {
+    public async remove(id: bigint): Promise<IResult<bigint>> {
         try {
-            const deleteResult: DeleteResult = await this._taskRepository.delete({id: data.id});
+            const deleteResult: DeleteResult = await this._taskRepository.delete({id: id});
             if (deleteResult.affected && deleteResult.affected > 0) {
                 return {
-                    data: data.id,
-                    errors: []
+                    result: id,
+                    error: null
                 };
             }
             return {
-                data: null,
-                errors: ['The record was not found or the data has not deleted.']
+                error: 'The record was not found or the data has not deleted.'
             };
         } catch (error: any) {
             return {
-                data: null,
-                errors: [error.message]
+                error: error.message
             };
         }
     }
 
-    public async update(data: IUpdateTaskRequest): Promise<IGeneralResponse<bigint | null>> {
+    public async update(id: bigint, filter: DeepPartial<Task>): Promise<IResult<bigint>> {
         try {
-            const updateResult: UpdateResult = await this._taskRepository.update({id: data.id}, data.filter);
+            const updateResult: UpdateResult = await this._taskRepository.update({id: id}, filter);
             if (updateResult.affected && updateResult.affected > 0) {
                 return {
-                    data: data.id,
-                    errors: []
+                    result: id,
+                    error: null
                 };
             }
             return {
-                data: null,
-                errors: ['The record was not found or the data has not changed.']
+                error: 'The record was not found or the data has not changed.'
             };
         } catch (error: any) {
             return {
-                data: null,
-                errors: [error.message]
+                error: error.message
+            };
+        }
+    }
+
+    public async getByBoardId(id: bigint): Promise<IResult<Task[]>> {
+        try {
+            const tasks: Task[] = await this._taskRepository.find({
+                where: {
+                    board: {id: id}
+                },
+                relations: {
+                    deadline: true,
+                    status: true,
+                    author: true,
+                    executors: true,
+                    attachments: true
+                }
+            });
+            if (tasks.length === 0) {
+                return {
+                    error: `Unable to find any tasks for the board^ ${id}`
+                };
+            }
+            return {
+                result: tasks,
+                error: null
+            };
+        } catch (error: any) {
+            return {
+                error: error.message
+            };
+        }
+    }
+
+    public async removeByBoardId(id: bigint): Promise<IResult<bigint>> {
+        try {
+            const deleteResult: DeleteResult = await this._taskRepository.delete({ board: {id: id} });
+            if (deleteResult.affected && deleteResult.affected > 0) {
+                return {
+                    result: id,
+                    error: null
+                };
+            }
+            return {
+                error: 'The record was not found or the data has not deleted.'
+            };
+        } catch (error: any) {
+            return {
+                error: error.message
             };
         }
     }
