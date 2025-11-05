@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 
 import { Task } from "./task.entity";
-import { ICreateTaskRequest } from "./task.models";
+import { ICreateTaskRequest, IRemoveTaskRequest, IUpdateTaskRequest } from "./task.models";
 
 @Injectable()
 export class TaskService {
@@ -49,12 +49,12 @@ export class TaskService {
         }
     }
 
-    public async remove(id: bigint) {
+    public async remove(data: IRemoveTaskRequest): Promise<IGeneralResponse<bigint | null>> {
         try {
-            const deleteResult: DeleteResult = await this._taskRepository.delete({id: id});
+            const deleteResult: DeleteResult = await this._taskRepository.delete({id: data.id});
             if (deleteResult.affected && deleteResult.affected > 0) {
                 return {
-                    data: id,
+                    data: data.id,
                     errors: []
                 };
             }
@@ -70,12 +70,12 @@ export class TaskService {
         }
     }
 
-    public async update(id: bigint, filter: DeepPartial<Task>): Promise<IGeneralResponse<bigint | null>> {
+    public async update(data: IUpdateTaskRequest): Promise<IGeneralResponse<bigint | null>> {
         try {
-            const updateResult: UpdateResult = await this._taskRepository.update({id: id}, filter);
+            const updateResult: UpdateResult = await this._taskRepository.update({id: data.id}, data.filter);
             if (updateResult.affected && updateResult.affected > 0) {
                 return {
-                    data: id,
+                    data: data.id,
                     errors: []
                 };
             }

@@ -1,3 +1,7 @@
+import { IFilter } from "src/common/intrfaces/IProcessing";
+
+import { Task } from "./task.entity";
+
 export interface ICreateTaskRequest {
     title: string;
     description: string;
@@ -8,3 +12,11 @@ export interface ICreateTaskRequest {
     authorId: bigint;
     executorIds: bigint[];
 };
+
+export interface IUpdateTaskRequest extends IFilter<Task> {
+    id: bigint;
+};
+
+export interface IRemoveTaskRequest {
+    id: bigint;
+}

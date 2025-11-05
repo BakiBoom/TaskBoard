@@ -2,8 +2,8 @@ import {Injectable} from "@nestjs/common";
 import {ILogin, IRegister} from "src/auth/auth.models";
 import {IUserPayload} from "src/auth/jwt/jwt.models";
 import {JwtService} from "src/auth/jwt/jwt.service";
+import { Crypt } from "src/common/utils/crypt";
 import {UserRepository} from "src/user/user.repository";
-import { Crypt } from "src/utils/crypt";
 
 @Injectable()
 export class AuthService {
