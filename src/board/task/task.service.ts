@@ -1,4 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import {
+    Inject,
+    Injectable
+} from "@nestjs/common";
+import { TASK_REPOSITORY } from "src/common/constants";
 import { IResult } from "src/common/intrfaces/IProcessing";
 import { User } from "src/user/user.entity";
 import {
@@ -13,6 +17,7 @@ import { Task } from "./task.entity";
 @Injectable()
 export class TaskService {
     constructor(
+        @Inject(TASK_REPOSITORY)
         private readonly _taskRepository: Repository<Task>,
     ) {}
 

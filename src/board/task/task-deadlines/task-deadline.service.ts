@@ -1,12 +1,20 @@
-import { Injectable } from "@nestjs/common";
+import {
+    Inject,
+    Injectable
+} from "@nestjs/common";
+import { TASK_DEADLINE_REPOSITORY } from "src/common/constants";
 import { IResult } from "src/common/intrfaces/IProcessing";
-import { DeepPartial, Repository } from "typeorm";
+import {
+    DeepPartial,
+    Repository
+} from "typeorm";
 
 import { TaskDeadline } from "./task-deadline.entity";
 
 @Injectable()
 export class TaskDeadlineService {
     constructor (
+        @Inject(TASK_DEADLINE_REPOSITORY)
         private readonly _taskStatusRepository: Repository<TaskDeadline>
     ) {}
 

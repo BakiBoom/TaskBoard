@@ -1,12 +1,20 @@
-import { Injectable } from "@nestjs/common";
+import {
+    Inject,
+    Injectable
+} from "@nestjs/common";
+import { TASK_STATUS_REPOSITORY } from "src/common/constants";
 import { IResult } from "src/common/intrfaces/IProcessing";
-import { DeepPartial, Repository } from "typeorm";
+import {
+    DeepPartial,
+    Repository
+} from "typeorm";
 
 import { TaskStatus } from "./task-status.entity";
 
 @Injectable()
 export class TaskStatusService {
     constructor (
+        @Inject(TASK_STATUS_REPOSITORY)
         private readonly _taskStatusRepository: Repository<TaskStatus>
     ) {}
 

@@ -1,4 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import {
+    Inject,
+    Injectable
+} from "@nestjs/common";
+import { BOARD_REPOSITORY } from "src/common/constants";
 import {
     IResult,
     IUserForBoard
@@ -21,6 +25,7 @@ export class BoardService {
     constructor(
         private readonly _taskService: TaskService,
         private readonly _userBoardsService: UserBoardsService,
+        @Inject(BOARD_REPOSITORY)
         private readonly _boardRepository: Repository<Board>
     ) {}
 

@@ -9,7 +9,7 @@ import { TaskModule } from './task/task.module';
         TaskModule,
         UserBoardsModule
     ],
-    providers: [BoardService], //TODO сделать провайдер для репозитория
+    providers: [BoardService],
     exports: [BoardService]
 })
 export class BoardModule {}

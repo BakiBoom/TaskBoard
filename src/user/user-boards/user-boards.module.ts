@@ -6,6 +6,6 @@ import { UserBoardsService } from './user-boards.service';
 
 @Module({
     imports: [RoleModule],
-    providers: [UserBoardsService] //TODO сделать провайдер для репозитория
+    providers: [UserBoardsService]
 })
 export class UserBoardsModule {}
