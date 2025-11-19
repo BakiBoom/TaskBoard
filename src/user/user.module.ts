@@ -5,6 +5,8 @@ import { UserRepository } from "src/user/user.repository";
 
 import { RoleModule } from './role/role.module';
 import { UserBoardsModule } from './user-boards/user-boards.module';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 
 @Module({
     imports: [
@@ -12,7 +14,8 @@ import { UserBoardsModule } from './user-boards/user-boards.module';
         RoleModule,
         UserBoardsModule
     ],
-    providers: [UserRepository],
+    providers: [UserRepository, UserService],
     exports: [UserRepository],
+    controllers: [UserController],
 })
 export class UserModule {}

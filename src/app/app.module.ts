@@ -16,6 +16,7 @@ import authConfig from "src/core/config/auth.config";
 import databaseConfig from "src/core/config/database.config";
 import redisConfig from "src/core/config/redis.config";
 import { getTypeOrmConnfig } from "src/core/database.factory";
+import {UserModule} from "src/user/user.module";
 
 import { AppService } from "./app.service";
 
@@ -37,6 +38,7 @@ import { AppService } from "./app.service";
         }),
         AuthModule,
         JwtModule,
+        UserModule,
     ],
     controllers: [],
     providers: [AppService],
@@ -45,6 +47,8 @@ export class AppModule {
     configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(AuthMiddleware)
-            .forRoutes({path: 'auth/test', method: RequestMethod.ALL});
+            .forRoutes(
+                {path: 'auth/test', method: RequestMethod.ALL},
+                {path: 'profile/*', method: RequestMethod.ALL},);
     }
 }

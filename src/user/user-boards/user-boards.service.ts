@@ -90,9 +90,9 @@ export class UserBoardsService {
         }
     }
 
-    public async getByUserId(id: bigint): Promise<IResult<UserBoards[]>> {
+    public async getByUserId(id: bigint): Promise<UserBoards[] | null> {
         try {
-            const result: UserBoards[] = await this._userBoardRepository.find({
+            return await this._userBoardRepository.find({
                 where: {
                     user: {id: id}
                 },
@@ -102,19 +102,8 @@ export class UserBoardsService {
                     user: true
                 }
             });
-            if (result.length === 0) {
-                return {
-                    error: `Unable to find records for user with id: ${id}`
-                };
-            }
-            return {
-                result: result,
-                error: null
-            };
         } catch (error: any) {
-            return {
-                error: error.message
-            };
+            return null;
         }
     }
 
