@@ -11,6 +11,7 @@ import { IUserPayload } from "src/auth/jwt/jwt.models";
 import { JwtService } from "src/auth/jwt/jwt.service";
 import { Crypt } from "src/common/utils/crypt";
 import { User } from "src/user/user.entity";
+import { IUserProfile } from "src/user/user.models";
 import { UserService } from "src/user/user.service";
 
 @Injectable()
@@ -64,7 +65,7 @@ export class AuthService {
     }
 
     async validate(payload: IUserPayload): Promise<IUserPayload> {
-        const user: User = await this._userService.getById(payload.userId);
+        const user: User | IUserProfile = await this._userService.getById(payload.userId);
         return {
             userId: user.id,
             username: user.username,

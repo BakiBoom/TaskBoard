@@ -1,11 +1,10 @@
-import {Attachment} from "src/attachment/attachment.entity";
-import {UserBoards} from "src/user/user-boards/user-boards.entity";
+import { Attachment } from "src/attachment/attachment.entity";
+import { Board } from "src/board/board.entity";
 
 export interface IUserProfile {
     id: bigint;
     username: string;
-    email?: string;
-    avatars?: Attachment[];
-    createDate: string;
-    boards: UserBoards[] | null;
-}
+    email: string;
+    avatars: Attachment[];
+    boards: Board[];
+};

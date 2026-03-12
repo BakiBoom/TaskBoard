@@ -10,7 +10,8 @@ import { UserBoardsService } from "src/user/user-boards/user-boards.service";
 import {
     DeepPartial,
     DeleteResult,
-    Repository
+    Repository,
+    In
 } from "typeorm";
 
 import { Board } from "./board.entity";
@@ -50,6 +51,18 @@ export class BoardService {
             userBoards: userBoards,
             tasks: tasks
         };
+    }
+
+    public async getByIds(ids: bigint[]): Promise<Board[]> {
+        const boards: Board[] = await this._boardRepository.find({
+            where: {
+                id: In(ids)
+            }
+        });
+        if (!boards || boards.length === 0) {
+            throw new NotFoundException(`Could not find boards with ids: ${ids}.`);
+        }
+        return boards;
     }
 
     public async remove(boardId: bigint): Promise<boolean> {

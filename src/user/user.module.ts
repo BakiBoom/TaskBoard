@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { BoardModule } from 'src/board/board.module';
 import { User } from "src/user/user.entity";
 
 import { RoleModule } from './role/role.module';
@@ -10,7 +11,8 @@ import { UserService } from './user.service';
     imports: [
         TypeOrmModule.forFeature([User]),
         RoleModule,
-        UserBoardsModule
+        UserBoardsModule,
+        BoardModule
     ],
     providers: [UserService],
     exports: [],
