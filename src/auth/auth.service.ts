@@ -54,12 +54,13 @@ export class AuthService {
             username: user.username,
         });
         await this._jwtService.setToken(user.id.toString(), tokens.refreshToken);
+        await this._jwtService.setToken(user.id.toString(), tokens.refreshToken);
 
         return tokens.accessToken;
     }
 
     async logout(id: number): Promise<boolean> {
-        await this._jwtService.deleteToken(String(id));
+        await this._jwtService.deleteToken(id.toString());
         return true;
     }
 

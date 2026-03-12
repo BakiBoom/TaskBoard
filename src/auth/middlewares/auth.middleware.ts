@@ -9,6 +9,7 @@ import {
     Response
 } from "express";
 import { JwtService } from "src/auth/jwt/jwt.service";
+import { ACCESS_TOKENS } from "src/common/constants";
 
 import { ITokens, IUserPayload } from "../jwt/jwt.models";
 
@@ -18,7 +19,7 @@ export class AuthMiddleware implements NestMiddleware {
         private readonly _jwtService: JwtService
     ) {}
 
-    async use(req: Request, res: Response, next: NextFunction) {
+    async use(req: Request, res: Response, next: NextFunction): Promise<void> {
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
             throw new UnauthorizedException('Authorization token missing or invalid');
@@ -61,7 +62,7 @@ export class AuthMiddleware implements NestMiddleware {
             email: decodeToken.email,
             username: decodeToken.username,
         };
-        res.setHeader('X-Access-Token', newTokens.accessToken);
+        res.setHeader(ACCESS_TOKENS, newTokens.accessToken);
 
         next();
     }
