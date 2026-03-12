@@ -4,7 +4,7 @@ import {
 } from "@nestjs/common";
 import { ConfigType } from "@nestjs/config";
 import * as jwt from "jsonwebtoken";
-import { IUserPayload } from "src/auth/jwt/jwt.models";
+import { ITokens, IUserPayload } from "src/auth/jwt/jwt.models";
 import authConfig from "src/core/config/auth.config";
 import { RedisService } from "src/redis/redis.service";
 
@@ -12,33 +12,48 @@ import { RedisService } from "src/redis/redis.service";
 export class JwtService {
     constructor(
         @Inject(authConfig.KEY)
-        private authConfiguration: ConfigType<typeof authConfig> ,
-        private redisService: RedisService
+        private _authConfiguration: ConfigType<typeof authConfig> ,
+        private _redisService: RedisService
     ) {}
 
-    public generateTokens(userPayload: IUserPayload) {
-        const accessToken = jwt.sign(userPayload, this.authConfiguration.secretKey, {expiresIn: this.authConfiguration.accessExpiresIn} as jwt.SignOptions);
-        const refreshToken = jwt.sign(userPayload, this.authConfiguration.secretKey, {expiresIn: this.authConfiguration.refershExpiresIn} as jwt.SignOptions);
-        return {accessToken, refreshToken};
+    public generateTokens(userPayload: IUserPayload): ITokens {
+        const accessToken = jwt.sign(
+            userPayload,
+            this._authConfiguration.secretKey,
+            { expiresIn: this._authConfiguration.accessExpiresIn } as jwt.SignOptions
+        );
+        const refreshToken = jwt.sign(
+            userPayload,
+            this._authConfiguration.secretKey,
+            { expiresIn: this._authConfiguration.refershExpiresIn } as jwt.SignOptions
+        );
+        return {
+            accessToken,
+            refreshToken
+        };
     }
 
-    public decodeToken(token: string) {
-        return jwt.decode(token) as IUserPayload;
+    public decodeToken(token: string): IUserPayload | null {
+        return jwt.decode(token) as IUserPayload | null;
     }
 
-    public verifyToken(token: string) {
-        return jwt.verify(token, this.authConfiguration.secretKey, {ignoreExpiration: false}) as IUserPayload;
+    public verifyToken(token: string): IUserPayload {
+        return jwt.verify(
+            token,
+            this._authConfiguration.secretKey,
+            { ignoreExpiration: false }
+        ) as IUserPayload;
     }
 
-    public async setToken(key: string, token: string): Promise<string | null> {
-        return await this.redisService.set(key, token);
+    public async setToken(key: string, token: string): Promise<string> {
+        return await this._redisService.set(key, token);
     }
 
     public async getToken(key: string): Promise<string | null> {
-        return await this.redisService.get(key);
+        return await this._redisService.get(key);
     }
 
-    public async deleteToken(key: string): Promise<number | null> {
-        return await this.redisService.delete(key);
+    public async deleteToken(key: string): Promise<number> {
+        return await this._redisService.delete(key);
     }
 }

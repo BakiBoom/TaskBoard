@@ -1,4 +1,4 @@
-export interface IRemoveUserBoard {
-    userId: bigint,
-    boardId: bigint
+export interface IUserRole {
+    userId: bigint;
+    roleId: number;
 };

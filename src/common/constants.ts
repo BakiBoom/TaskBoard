@@ -6,3 +6,4 @@ export const TASK_REPOSITORY: string = 'TASK_REPOSITORY';
 export const ROLE_REPOSITORY: string = 'ROLE_REPOSITORY';
 export const USER_BOARDS_REPOSITORY: string = 'USER_BOARDS_REPOSITORY';
 export const BOARD_REPOSITORY: string = 'BOARD_REPOSITORY';
+export const USER_REPOSITORY: string = 'USER_REPOSITORY';

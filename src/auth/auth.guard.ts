@@ -1,4 +1,7 @@
-import {CanActivate, ExecutionContext} from "@nestjs/common";
+import {
+    CanActivate,
+    ExecutionContext
+} from "@nestjs/common";
 
 export class JwtGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean {

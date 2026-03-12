@@ -6,7 +6,7 @@ import { DataSource } from "typeorm";
 
 import { UserBoards } from "./user-boards.entity";
 
-export const taskStatusProviders = [{
+export const userBoardProviders = [{
     provide: USER_BOARDS_REPOSITORY,
     useFactory: (dataSource: DataSource) => dataSource.getRepository(UserBoards),
     inject: [DATA_SOURCE],

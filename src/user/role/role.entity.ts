@@ -1,6 +1,7 @@
 import {
     BaseEntity,
     Column,
+    CreateDateColumn,
     Entity,
     PrimaryGeneratedColumn
 } from "typeorm";
@@ -9,9 +10,9 @@ import {
 export class Role extends BaseEntity {
     @PrimaryGeneratedColumn({
         name: 'id',
-        type: 'bigint'
+        type: 'int'
     })
-    id: bigint;
+    id: number;
 
     @Column({
         name: 'title',
@@ -27,4 +28,10 @@ export class Role extends BaseEntity {
         nullable: false
     })
     description: string;
+
+    @CreateDateColumn({
+        name: 'create_date',
+        nullable: false
+    })
+    createDate: string;
 }

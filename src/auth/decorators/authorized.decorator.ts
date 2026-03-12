@@ -1,6 +1,9 @@
-import {createParamDecorator, ExecutionContext} from "@nestjs/common";
-import {Request} from "express";
-import {IUserPayload} from "src/auth/jwt/jwt.models";
+import {
+    createParamDecorator,
+    ExecutionContext
+} from "@nestjs/common";
+import { Request } from "express";
+import { IUserPayload } from "src/auth/jwt/jwt.models";
 
 export const UserData = createParamDecorator(
     (data: keyof IUserPayload | undefined, ctx: ExecutionContext)=> {
