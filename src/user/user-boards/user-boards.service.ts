@@ -25,6 +25,11 @@ export class UserBoardsService {
         private readonly _userBoardRepository: Repository<UserBoards>,
     ) {}
 
+    /**
+     * Метод получет связи пользователь-доска для пользователя роли Master
+     * @param id Уникальный идентификатор пользователя
+     * @returns Возвращает список связей с досками для пользователя роли Master
+     */
     public async getByMasterId(id: bigint): Promise<UserBoards[]> {
         const role: Role = await this._roleService.getById(MainRoles.MASTER);
         const result: UserBoards[] = await this._userBoardRepository.find({
@@ -44,6 +49,11 @@ export class UserBoardsService {
         return result;
     }
 
+    /**
+     * Метод получает связи пользователь-доска для доски
+     * @param id Уникальный идентификатор доски
+     * @returns Возвращает список связей с пользователями для доски
+     */
     public async getByBoardId(id: bigint): Promise<UserBoards[]> {
         const result: UserBoards[] = await this._userBoardRepository.find({
             where: {
@@ -61,6 +71,11 @@ export class UserBoardsService {
         return result;
     }
 
+    /**
+     * Метод получет связи пользователь-доска для пользователя
+     * @param id Уникальный идентификатор пользователя
+     * @returns Возвращает список связей с досками для пользователя
+     */
     public async getByUserId(id: bigint): Promise<UserBoards[]> {
         const result: UserBoards[] = await this._userBoardRepository.find({
             where: {
@@ -78,8 +93,14 @@ export class UserBoardsService {
         return result;
     }
 
-    public async create(boardId: bigint, userRole: IUserRole[]): Promise<UserBoards[]> {
-        const filter: DeepPartial<UserBoards>[] = userRole.map(
+    /**
+     * Создание связи пользователей с доской
+     * @param boardId Уникальный идентификатор доски
+     * @param usersRoles список пользователей и их ролей для создания связи с доской
+     * @returns Возвращает список новых связей доски с пользователями
+     */
+    public async create(boardId: bigint, usersRoles: IUserRole[]): Promise<UserBoards[]> {
+        const filter: DeepPartial<UserBoards>[] = usersRoles.map(
             item => ({
                 user: { id: item.userId },
                 role: { id: item.roleId },
@@ -94,7 +115,13 @@ export class UserBoardsService {
         return userBoards;
     }
 
-    public async removeUserByBoardId(boardId: bigint, userId: bigint): Promise<boolean> {
+    /**
+     * Удаление связей по идентификаторам доски и пользователя
+     * @param boardId Уникальный идентификатор доски
+     * @param userId Уникальный идентификатор пользователя
+     * @returns true в случае успешного удаления
+     */
+    public async removeByUserIdAndBoardId(boardId: bigint, userId: bigint): Promise<boolean> {
         const deleteResult: DeleteResult = await this._userBoardRepository.delete({
             user: { id: userId },
             board: { id: boardId }
@@ -105,6 +132,11 @@ export class UserBoardsService {
         throw new NotFoundException('The record was not found or the data has not deleted.');
     }
 
+    /**
+     * Удаление связей по идентификатору доски
+     * @param boardId Уникальный идентификатор доски
+     * @returns true в случае успешного удаления
+     */
     public async removeByBoardId(boardId: bigint): Promise<boolean> {
         const deleteResult: DeleteResult = await this._userBoardRepository.delete({
             board: { id: boardId }
@@ -115,6 +147,11 @@ export class UserBoardsService {
         throw new NotFoundException('The record was not found or the data has not deleted.');
     }
 
+    /**
+     * Удаление связей по идентификатору пользователя
+     * @param userId Уникальный идентификатор пользователя
+     * @returns true в случае успешного удаления
+     */
     public async removeByUserId(userId: bigint): Promise<boolean> {
         const deleteResult: DeleteResult = await this._userBoardRepository.delete({
             user: { id: userId }
