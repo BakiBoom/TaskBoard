@@ -84,12 +84,17 @@ export class UserService {
     }
 
     public async remove(id: bigint): Promise<boolean> {
-        const deleteResult: DeleteResult = await this._userRepository.delete({
-            id: id
-        });
-        if (deleteResult.affected && deleteResult.affected > 0) {
-            return true;
+        //NOTE Возможно тут нужна была бы транзакция бд, для прерывания отмены всех пройденых операций
+        const deleteResultUB: boolean = await this._userBoardsService.removeByUserId(id);
+        if (deleteResultUB) {
+            const deleteResult: DeleteResult = await this._userRepository.delete({
+                id: id
+            });
+            if (deleteResult.affected && deleteResult.affected > 0) {
+                return true;
+            }
+            throw new NotFoundException('The record was not found or the data has not deleted.');
         }
-        throw new NotFoundException('The record was not found or the data has not deleted.');
+        return false;
     }
 }
