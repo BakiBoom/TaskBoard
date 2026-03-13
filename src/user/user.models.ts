@@ -8,3 +8,8 @@ export interface IUserProfile {
     avatars: Attachment[];
     boards: Board[];
 };
+
+export interface IUpdateUserProfile {
+    id: bigint;
+    username: string;
+}

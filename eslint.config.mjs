@@ -19,8 +19,34 @@ export default tseslint.config(
             '@typescript-eslint/no-empty-object-type': 'off',
 
             "semi": ["error", "always"],
+            "indent": ["error", 4],
             "no-unused-vars": ["warn"],
-            "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
+            "@typescript-eslint/no-unused-vars": [
+                "warn",
+                {
+                    "argsIgnorePattern": "^_|^[A-Z]",
+                    "varsIgnorePattern": "^_|^[A-Z]"
+                }
+            ],
+            "@typescript-eslint/indent": [
+                "error",
+                4,
+                {
+                    "ignoredNodes": [
+                        "Decorator",
+                        "PropertyDefinition",
+                        "TSPropertyDeclaration",
+                        "ClassBody > PropertyDefinition"
+                    ]
+                }
+            ],
+            "no-multiple-empty-lines": [
+                "error",
+                {
+                    "max": 1,
+                    "maxEOF": 0
+                }
+            ],
             'no-trailing-spaces': 'error',
             'no-multi-spaces': 'error',
             'no-irregular-whitespace': 'error',
@@ -30,7 +56,7 @@ export default tseslint.config(
             "object-curly-newline": ["error", {
                 ImportDeclaration: {
                     multiline: true,
-                    minProperties: 4,
+                    minProperties: 2,
                     consistent: true
                 }
             }],

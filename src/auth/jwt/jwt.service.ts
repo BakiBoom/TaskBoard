@@ -4,7 +4,10 @@ import {
 } from "@nestjs/common";
 import { ConfigType } from "@nestjs/config";
 import * as jwt from "jsonwebtoken";
-import { ITokens, IUserPayload } from "src/auth/jwt/jwt.models";
+import {
+    ITokens,
+    IUserPayload
+} from "src/auth/jwt/jwt.models";
 import authConfig from "src/core/config/auth.config";
 import { RedisService } from "src/redis/redis.service";
 

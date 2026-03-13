@@ -11,7 +11,10 @@ import {
 import { JwtService } from "src/auth/jwt/jwt.service";
 import { ACCESS_TOKENS } from "src/common/constants";
 
-import { ITokens, IUserPayload } from "../jwt/jwt.models";
+import {
+    ITokens,
+    IUserPayload
+} from "../jwt/jwt.models";
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {

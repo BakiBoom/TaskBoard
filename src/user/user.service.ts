@@ -3,18 +3,33 @@ import {
     Injectable,
     NotFoundException
 } from "@nestjs/common";
-import { Board } from "src/board/board.entity";
-import { BoardService } from "src/board/board.service";
-import { USER_REPOSITORY } from "src/common/constants";
+import {
+    Board
+} from "src/board/board.entity";
+import {
+    BoardService
+} from "src/board/board.service";
+import {
+    USER_REPOSITORY
+} from "src/common/constants";
 import {
     DeepPartial,
+    DeleteResult,
     Repository
 } from "typeorm";
 
-import { UserBoards } from "./user-boards/user-boards.entity";
-import { UserBoardsService } from "./user-boards/user-boards.service";
-import { User } from "./user.entity";
-import { IUserProfile } from "./user.models";
+import {
+    UserBoards
+} from "./user-boards/user-boards.entity";
+import {
+    UserBoardsService
+} from "./user-boards/user-boards.service";
+import {
+    User
+} from "./user.entity";
+import {
+    IUserProfile
+} from "./user.models";
 
 @Injectable()
 export class UserService {
@@ -69,6 +84,29 @@ export class UserService {
         return await this._userRepository.save(entity);
     }
 
-    //TODO добавить метод обновления пользователя с учетом его аватара
+    public async update(id: bigint, username: string): Promise<boolean> {
+        const user: User | null = await this._userRepository.findOne({
+            where: {
+                id: id
+            }
+        });
+        if (!user) {
+            throw new NotFoundException(`Couldn't find user id: "${id}".`);
+        }
+        user.username = username;
+        await this._userRepository.save(user);
+        return true;
+    }
+
+    public async remove(id: bigint): Promise<boolean> {
+        const deleteResult: DeleteResult = await this._userRepository.delete({
+            id: id
+        });
+        if (deleteResult.affected && deleteResult.affected > 0) {
+            return true;
+        }
+        throw new NotFoundException('The record was not found or the data has not deleted.');
+    }
+
     //TODO добавить метод удаления пользователя (не точно)
 }
