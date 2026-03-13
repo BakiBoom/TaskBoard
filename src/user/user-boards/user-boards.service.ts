@@ -1,10 +1,8 @@
 import {
-    Inject,
     Injectable,
     NotFoundException,
     InternalServerErrorException
 } from "@nestjs/common";
-import { USER_BOARDS_REPOSITORY } from "src/common/constants";
 import { MainRoles } from "src/common/Enums/roles";
 import {
     DeepPartial,
@@ -17,12 +15,13 @@ import { RoleService } from "../role/role.service";
 
 import { UserBoards } from "./user-boards.entity";
 import { IUserRole } from "./user-boards.models";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class UserBoardsService {
     constructor (
         private readonly _roleService: RoleService,
-        @Inject(USER_BOARDS_REPOSITORY)
+        @InjectRepository(UserBoards)
         private readonly _userBoardRepository: Repository<UserBoards>,
     ) {}
 
@@ -107,7 +106,19 @@ export class UserBoardsService {
     }
 
     public async removeByBoardId(boardId: bigint): Promise<boolean> {
-        const deleteResult: DeleteResult = await this._userBoardRepository.delete({ board: { id: boardId } });
+        const deleteResult: DeleteResult = await this._userBoardRepository.delete({
+            board: { id: boardId }
+        });
+        if (deleteResult.affected && deleteResult.affected > 0) {
+            return true;
+        }
+        throw new NotFoundException('The record was not found or the data has not deleted.');
+    }
+
+    public async removeByUserId(userId: bigint): Promise<boolean> {
+        const deleteResult: DeleteResult = await this._userBoardRepository.delete({
+            user: { id: userId }
+        });
         if (deleteResult.affected && deleteResult.affected > 0) {
             return true;
         }

@@ -1,20 +1,19 @@
 import {
-    Inject,
     Injectable,
     NotFoundException
 } from "@nestjs/common";
-import { TASK_DEADLINE_REPOSITORY } from "src/common/constants";
 import {
     DeepPartial,
     Repository
 } from "typeorm";
 
 import { TaskDeadline } from "./task-deadline.entity";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class TaskDeadlineService {
     constructor (
-        @Inject(TASK_DEADLINE_REPOSITORY)
+        @InjectRepository(TaskDeadline)
         private readonly _taskDeadlineRepository: Repository<TaskDeadline>
     ) {}
 

@@ -1,10 +1,8 @@
 import {
-    Inject,
     Injectable,
     BadRequestException,
     NotFoundException
 } from "@nestjs/common";
-import { TASK_REPOSITORY } from "src/common/constants";
 import { User } from "src/user/user.entity";
 import {
     DeepPartial,
@@ -14,11 +12,12 @@ import {
 } from "typeorm";
 
 import { Task } from "./task.entity";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class TaskService {
     constructor(
-        @Inject(TASK_REPOSITORY)
+        @InjectRepository(Task)
         private readonly _taskRepository: Repository<Task>,
     ) {}
 

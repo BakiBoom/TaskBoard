@@ -1,17 +1,16 @@
 import {
-    Inject,
     Injectable,
     NotFoundException
 } from "@nestjs/common";
-import { ROLE_REPOSITORY } from "src/common/constants";
 import { Repository } from "typeorm";
 
 import { Role } from "./role.entity";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class RoleService {
     constructor (
-        @Inject(ROLE_REPOSITORY)
+        @InjectRepository(Role)
         private readonly _roleRepository: Repository<Role>
     ) {}
 

@@ -1,9 +1,7 @@
 import {
-    Inject,
     Injectable,
     NotFoundException
 } from "@nestjs/common";
-import { BOARD_REPOSITORY } from "src/common/constants";
 import { UserBoards } from "src/user/user-boards/user-boards.entity";
 import { IUserRole } from "src/user/user-boards/user-boards.models";
 import { UserBoardsService } from "src/user/user-boards/user-boards.service";
@@ -18,13 +16,14 @@ import { Board } from "./board.entity";
 import { IBoardInfo } from "./board.models";
 import { Task } from "./task/task.entity";
 import { TaskService } from "./task/task.service";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class BoardService {
     constructor(
         private readonly _taskService: TaskService,
         private readonly _userBoardsService: UserBoardsService,
-        @Inject(BOARD_REPOSITORY)
+        @InjectRepository(Board)
         private readonly _boardRepository: Repository<Board>
     ) {}
 

@@ -1,42 +1,27 @@
 import {
-    Inject,
     Injectable,
     NotFoundException
 } from "@nestjs/common";
-import {
-    Board
-} from "src/board/board.entity";
-import {
-    BoardService
-} from "src/board/board.service";
-import {
-    USER_REPOSITORY
-} from "src/common/constants";
+import { Board } from "src/board/board.entity";
+import { BoardService } from "src/board/board.service";
 import {
     DeepPartial,
     DeleteResult,
     Repository
 } from "typeorm";
 
-import {
-    UserBoards
-} from "./user-boards/user-boards.entity";
-import {
-    UserBoardsService
-} from "./user-boards/user-boards.service";
-import {
-    User
-} from "./user.entity";
-import {
-    IUserProfile
-} from "./user.models";
+import { UserBoards } from "./user-boards/user-boards.entity";
+import { UserBoardsService } from "./user-boards/user-boards.service";
+import { User } from "./user.entity";
+import { IUserProfile } from "./user.models";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class UserService {
     constructor (
         private readonly _userBoardsService: UserBoardsService,
         private readonly _boardService: BoardService,
-        @Inject(USER_REPOSITORY)
+        @InjectRepository(User)
         private readonly _userRepository: Repository<User>,
     ) {}
 
@@ -107,6 +92,4 @@ export class UserService {
         }
         throw new NotFoundException('The record was not found or the data has not deleted.');
     }
-
-    //TODO добавить метод удаления пользователя (не точно)
 }

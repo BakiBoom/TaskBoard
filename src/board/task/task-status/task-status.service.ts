@@ -1,20 +1,19 @@
 import {
-    Inject,
     Injectable,
     NotFoundException
 } from "@nestjs/common";
-import { TASK_STATUS_REPOSITORY } from "src/common/constants";
 import {
     DeepPartial,
     Repository
 } from "typeorm";
 
 import { TaskStatus } from "./task-status.entity";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class TaskStatusService {
     constructor (
-        @Inject(TASK_STATUS_REPOSITORY)
+        @InjectRepository(TaskStatus)
         private readonly _taskStatusRepository: Repository<TaskStatus>
     ) {}
 
